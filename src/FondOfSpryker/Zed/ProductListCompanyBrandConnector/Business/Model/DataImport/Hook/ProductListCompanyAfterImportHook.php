@@ -21,7 +21,6 @@ class ProductListCompanyAfterImportHook implements DataImporterAfterImportInterf
     protected $productListFacade;
 
     /**
-     *
      * @param \FondOfSpryker\Zed\BrandCompany\Business\BrandCompanyFacadeInterface $brandCompanyFacade
      * @param \FondOfSpryker\Zed\ProductList\Business\ProductListFacadeInterface $productListFacade
      */
