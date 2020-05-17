@@ -16,7 +16,7 @@ class ProductListCompanyAfterImportHook implements DataImporterAfterImportInterf
     protected $brandCompanyFacade;
 
     /**
-     * @var \Spryker\Zed\ProductList\Business\ProductListFacadeInterface
+     * @var \FondOfSpryker\Zed\ProductList\Business\ProductListFacadeInterface
      */
     protected $productListFacade;
 
@@ -60,16 +60,13 @@ class ProductListCompanyAfterImportHook implements DataImporterAfterImportInterf
     /**
      * @return void
      */
-    protected function createCompanyBrandRelations()
+    protected function createCompanyBrandRelations(): void
     {
         $productListCollectionTransfer = $this->productListFacade->getAllProductLists();
 
-        if ($productListCollectionTransfer === null) {
-            return null;
-        }
-
         foreach ($productListCollectionTransfer->getProductLists() as $productListTransfer) {
-            if (count($productListTransfer->getBrandRelation()->getIdBrands()) > 0 &&
+            if (
+                count($productListTransfer->getBrandRelation()->getIdBrands()) > 0 &&
                 count($productListTransfer->getProductListCompanyRelation()->getCompanyIds()) > 0
             ) {
                 $this->saveCompanyBrandRelations(
