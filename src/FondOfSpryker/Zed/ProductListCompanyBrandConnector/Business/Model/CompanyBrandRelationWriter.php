@@ -48,16 +48,16 @@ class CompanyBrandRelationWriter implements CompanyBrandRelationWriterInterface
 
         $productListTransfer = (new ProductListTransfer())
             ->setIdProductList($productListCompanyRelationTransfer->getIdProductList());
-        $productListTransfer = $this->productListBrandConnectorFacade
+        $brandRelationTransfer = $this->productListBrandConnectorFacade
             ->findProductListBrandRelationByIdProductList($productListTransfer);
 
-        if ($productListTransfer->getBrandRelation() === null) {
+        if (count($brandRelationTransfer->getIdBrands()) === 0) {
             return $productListCompanyRelationTransfer;
         }
 
         $this->saveCompanyBrandRelations(
             $productListCompanyRelationTransfer->getCompanyIds(),
-            $productListTransfer->getBrandRelation()->getIdBrands()
+            $brandRelationTransfer->getIdBrands()
         );
 
         return $productListCompanyRelationTransfer;
@@ -74,11 +74,30 @@ class CompanyBrandRelationWriter implements CompanyBrandRelationWriterInterface
         array $brandIds
     ): void {
         foreach ($companyIds as $idCompany) {
+            $brandIds = array_unique(array_merge($brandIds, $this->findCurrentCompanyBrandIds($idCompany)));
             $this->brandCompanyFacade->saveCompanyBrandRelation(
                 (new CompanyBrandRelationTransfer())
                     ->setIdCompany($idCompany)
                     ->setIdBrands($brandIds)
             );
         }
+    }
+
+    /**
+     * @param int $idCustomer
+     *
+     * @return int[]
+     */
+    protected function findCurrentCompanyBrandIds(int $idCompany): array
+    {
+        $companyBrandRelationTransfer = (new CompanyBrandRelationTransfer())->setIdCompany($idCompany);
+        $currentCompanyBrandRelationTransfer =
+            $this->brandCompanyFacade->findCompanyBrandRelationByIdCompany($companyBrandRelationTransfer);
+
+        if (count($companyBrandRelationTransfer->getIdBrands()) === 0) {
+            return [];
+        }
+
+        return $currentCompanyBrandRelationTransfer->getIdBrands();
     }
 }

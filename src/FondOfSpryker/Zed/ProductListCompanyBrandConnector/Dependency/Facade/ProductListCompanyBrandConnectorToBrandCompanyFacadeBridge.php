@@ -23,11 +23,21 @@ class ProductListCompanyBrandConnectorToBrandCompanyFacadeBridge implements Prod
     /**
      * @param \Generated\Shared\Transfer\CompanyBrandRelationTransfer $companyBrandRelationTransfer
      *
-     * @return void
+     * @return \Generated\Shared\Transfer\CompanyBrandRelationTransfer
      */
     public function saveCompanyBrandRelation(
         CompanyBrandRelationTransfer $companyBrandRelationTransfer
-    ): void {
-        $this->brandCompanyFacade->saveCompanyBrandRelation($companyBrandRelationTransfer);
+    ): CompanyBrandRelationTransfer {
+        return $this->brandCompanyFacade->saveCompanyBrandRelation($companyBrandRelationTransfer);
+    }
+
+    /**
+     * @param \Generated\Shared\Transfer\CompanyBrandRelationTransfer $companyBrandRelationTransfer
+     * @return \Generated\Shared\Transfer\CompanyBrandRelationTransfer
+     */
+    public function findCompanyBrandRelationByIdCompany(
+        CompanyBrandRelationTransfer $companyBrandRelationTransfer
+    ): CompanyBrandRelationTransfer {
+        return $this->brandCompanyFacade->findCompanyBrandRelationByIdCompany($companyBrandRelationTransfer);
     }
 }
