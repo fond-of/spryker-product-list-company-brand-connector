@@ -3,6 +3,7 @@
 namespace FondOfSpryker\Zed\ProductListCompanyBrandConnector\Dependency\Facade;
 
 use FondOfSpryker\Zed\ProductListBrandConnector\Business\ProductListBrandConnectorFacadeInterface;
+use Generated\Shared\Transfer\BrandRelationTransfer;
 use Generated\Shared\Transfer\ProductListTransfer;
 
 class ProductListCompanyBrandConnectorToProductListBrandConnectorFacadeBridge implements ProductListCompanyBrandConnectorToProductListBrandConnectorFacadeInterface
@@ -23,11 +24,11 @@ class ProductListCompanyBrandConnectorToProductListBrandConnectorFacadeBridge im
     /**
      * @param \Generated\Shared\Transfer\ProductListTransfer $productListTransfer
      *
-     * @return \Generated\Shared\Transfer\ProductListTransfer
+     * @return \Generated\Shared\Transfer\BrandRelationTransfer
      */
     public function findProductListBrandRelationByIdProductList(
         ProductListTransfer $productListTransfer
-    ): ProductListTransfer {
+    ): BrandRelationTransfer {
         return $this->productListBrandConnectorFacade->findProductListBrandRelationByIdProductList($productListTransfer);
     }
 }
