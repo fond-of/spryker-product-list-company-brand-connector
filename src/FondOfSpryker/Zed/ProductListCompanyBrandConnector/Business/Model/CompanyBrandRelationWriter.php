@@ -74,11 +74,11 @@ class CompanyBrandRelationWriter implements CompanyBrandRelationWriterInterface
         array $brandIds
     ): void {
         foreach ($companyIds as $idCompany) {
-            $brandIds = array_unique(array_merge($brandIds, $this->findCurrentCompanyBrandIds($idCompany)));
+            $saveBrandIds = array_unique(array_merge($brandIds, $this->findCurrentCompanyBrandIds($idCompany)));
             $this->brandCompanyFacade->saveCompanyBrandRelation(
                 (new CompanyBrandRelationTransfer())
                     ->setIdCompany($idCompany)
-                    ->setIdBrands($brandIds)
+                    ->setIdBrands($saveBrandIds)
             );
         }
     }
@@ -94,7 +94,7 @@ class CompanyBrandRelationWriter implements CompanyBrandRelationWriterInterface
         $currentCompanyBrandRelationTransfer =
             $this->brandCompanyFacade->findCompanyBrandRelationByIdCompany($companyBrandRelationTransfer);
 
-        if (count($companyBrandRelationTransfer->getIdBrands()) === 0) {
+        if (count($currentCompanyBrandRelationTransfer->getIdBrands()) === 0) {
             return [];
         }
 
