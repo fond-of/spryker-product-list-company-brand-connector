@@ -20,6 +20,7 @@ class ProductListCompanyBrandConnectorDependencyProvider extends AbstractBundleD
     public function provideBusinessLayerDependencies(Container $container): Container
     {
         $container = parent::provideBusinessLayerDependencies($container);
+
         $container = $this->addBrandCompanyFacade($container);
         $container = $this->addProductListFacade($container);
 

@@ -2,7 +2,7 @@
 
 namespace FondOfSpryker\Zed\ProductListCompanyBrandConnector\Dependency\Facade;
 
-use FondOfSpryker\Zed\BrandCompany\Business\BrandCompanyFacade;
+use FondOfSpryker\Zed\BrandCompany\Business\BrandCompanyFacadeInterface;
 use Generated\Shared\Transfer\CompanyBrandRelationTransfer;
 
 class ProductListCompanyBrandConnectorToBrandCompanyFacadeBridge implements ProductListCompanyBrandConnectorToBrandCompanyFacadeInterface
@@ -13,9 +13,9 @@ class ProductListCompanyBrandConnectorToBrandCompanyFacadeBridge implements Prod
     protected $brandCompanyFacade;
 
     /**
-     * @param \FondOfSpryker\Zed\BrandCompany\Business\BrandCompanyFacade $brandCompanyFacade
+     * @param \FondOfSpryker\Zed\BrandCompany\Business\BrandCompanyFacadeInterface $brandCompanyFacade
      */
-    public function __construct(BrandCompanyFacade $brandCompanyFacade)
+    public function __construct(BrandCompanyFacadeInterface $brandCompanyFacade)
     {
         $this->brandCompanyFacade = $brandCompanyFacade;
     }
@@ -33,6 +33,7 @@ class ProductListCompanyBrandConnectorToBrandCompanyFacadeBridge implements Prod
 
     /**
      * @param \Generated\Shared\Transfer\CompanyBrandRelationTransfer $companyBrandRelationTransfer
+     *
      * @return \Generated\Shared\Transfer\CompanyBrandRelationTransfer
      */
     public function findCompanyBrandRelationByIdCompany(
