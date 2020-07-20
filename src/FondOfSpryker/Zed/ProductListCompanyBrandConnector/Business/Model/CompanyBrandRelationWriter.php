@@ -11,7 +11,7 @@ use Generated\Shared\Transfer\ProductListTransfer;
 class CompanyBrandRelationWriter implements CompanyBrandRelationWriterInterface
 {
     /**
-     * @var \FondOfSpryker\Zed\BrandCompany\Business\Model\BrandCompanyRelationReaderInterface
+     * @var \FondOfSpryker\Zed\ProductListCompanyBrandConnector\Dependency\Facade\ProductListCompanyBrandConnectorToBrandCompanyFacadeInterface
      */
     protected $brandCompanyFacade;
 
@@ -40,9 +40,10 @@ class CompanyBrandRelationWriter implements CompanyBrandRelationWriterInterface
     public function saveCompanyBrandRelationByIdProductListAndCompanyIds(
         ProductListCompanyRelationTransfer $productListCompanyRelationTransfer
     ): ProductListCompanyRelationTransfer {
-
-        if (count($productListCompanyRelationTransfer->getCompanyIds()) === 0
-            || $productListCompanyRelationTransfer->getIdProductList() === null) {
+        if (
+            $productListCompanyRelationTransfer->getIdProductList() === null
+            || count($productListCompanyRelationTransfer->getCompanyIds()) === 0
+        ) {
             return $productListCompanyRelationTransfer;
         }
 
@@ -84,7 +85,7 @@ class CompanyBrandRelationWriter implements CompanyBrandRelationWriterInterface
     }
 
     /**
-     * @param int $idCustomer
+     * @param int $idCompany
      *
      * @return int[]
      */

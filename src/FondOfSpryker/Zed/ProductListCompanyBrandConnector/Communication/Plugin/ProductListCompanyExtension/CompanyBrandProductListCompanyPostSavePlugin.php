@@ -19,7 +19,6 @@ class CompanyBrandProductListCompanyPostSavePlugin extends AbstractPlugin implem
     public function postSave(
         ProductListCompanyRelationTransfer $productListCompanyRelationTransfer
     ): ProductListCompanyRelationTransfer {
-
         return $this
             ->getFacade()
             ->saveCompanyBrandRelationByIdProductListAndCompanyIds($productListCompanyRelationTransfer);
