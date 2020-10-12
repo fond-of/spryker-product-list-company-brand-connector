@@ -5,6 +5,7 @@ namespace FondOfSpryker\Zed\ProductListCompanyBrandConnector\Business\Model\Data
 use FondOfSpryker\Zed\BrandCompany\Business\BrandCompanyFacadeInterface;
 use FondOfSpryker\Zed\ProductList\Business\ProductListFacadeInterface;
 use Generated\Shared\Transfer\CompanyBrandRelationTransfer;
+use Generated\Shared\Transfer\ProductListTransfer;
 use Orm\Zed\BrandCompany\Persistence\FosBrandCompanyQuery;
 use Spryker\Zed\DataImport\Business\Model\DataImporterAfterImportInterface;
 
@@ -65,30 +66,58 @@ class ProductListCompanyAfterImportHook implements DataImporterAfterImportInterf
         $productListCollectionTransfer = $this->productListFacade->getAllProductLists();
 
         if ($productListCollectionTransfer === null) {
-            return null;
+            return;
         }
 
+        $companyBrandRelations = [];
         foreach ($productListCollectionTransfer->getProductLists() as $productListTransfer) {
             if (count($productListTransfer->getBrandRelation()->getIdBrands()) > 0 &&
                 count($productListTransfer->getProductListCompanyRelation()->getCompanyIds()) > 0
             ) {
-                $this->saveCompanyBrandRelations(
-                    $productListTransfer->getProductListCompanyRelation()->getCompanyIds(),
-                    $productListTransfer->getBrandRelation()->getIdBrands()
-                );
+                $companyBrandRelations = $this
+                    ->buildCompanyBrandRelationsForProductListTransfer($productListTransfer, $companyBrandRelations);
             }
         }
+
+        if (count($companyBrandRelations) === 0) {
+            return;
+        }
+
+        $this->saveCompanyBrandRelations($companyBrandRelations);
     }
 
     /**
-     * @param array $companyIds
-     * @param array $brandIds
+     * @param \Generated\Shared\Transfer\ProductListTransfer $productListTransfer
+     * @param array $companyBrandRelations
      *
-     * @return void
+     * @return array
      */
-    protected function saveCompanyBrandRelations(array $companyIds, array $brandIds): void
+    protected function buildCompanyBrandRelationsForProductListTransfer(
+        ProductListTransfer $productListTransfer,
+        array $companyBrandRelations
+    ): array {
+        foreach ($productListTransfer->getProductListCompanyRelation()->getCompanyIds() as $companyId) {
+
+            if (array_key_exists($companyId, $companyBrandRelations) === false) {
+                $companyBrandRelations[$companyId] = $productListTransfer->getBrandRelation()->getIdBrands();
+                continue;
+            }
+
+            $companyBrandRelations[$companyId] = array_unique(array_merge(
+                $companyBrandRelations[$companyId],
+                $productListTransfer->getBrandRelation()->getIdBrands()
+            ));
+        }
+
+        return $companyBrandRelations;
+    }
+
+    /**
+     * @param array $companyBrandRelations
+     */
+    protected function saveCompanyBrandRelations(array $companyBrandRelations): void
     {
-        foreach ($companyIds as $idCompany) {
+        foreach ($companyBrandRelations as $idCompany => $brandIds) {
             $this->brandCompanyFacade->saveCompanyBrandRelation(
                 (new CompanyBrandRelationTransfer())->setIdCompany($idCompany)->setIdBrands($brandIds)
             );
