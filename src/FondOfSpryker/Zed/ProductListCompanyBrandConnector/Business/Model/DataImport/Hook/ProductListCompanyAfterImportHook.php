@@ -66,7 +66,7 @@ class ProductListCompanyAfterImportHook implements DataImporterAfterImportInterf
         $productListCollectionTransfer = $this->productListFacade->getAllProductLists();
 
         if ($productListCollectionTransfer === null) {
-            return null;
+            return;
         }
 
         $companyBrandRelations = [];
@@ -80,7 +80,7 @@ class ProductListCompanyAfterImportHook implements DataImporterAfterImportInterf
         }
 
         if (count($companyBrandRelations) === 0) {
-            return null;
+            return;
         }
 
         $this->saveCompanyBrandRelations($companyBrandRelations);
